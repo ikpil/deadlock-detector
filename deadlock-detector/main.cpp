@@ -2,18 +2,18 @@
 #include <string>
 #include "dldetector.hpp"
 
-class socpe_lock_log final
+class scope_log_log final
 {
 public:
-	socpe_lock_log(const socpe_lock_log&) = delete;
-	socpe_lock_log& operator=(const socpe_lock_log&) = delete;
+	scope_log_log(const scope_log_log&) = delete;
+	scope_log_log& operator=(const scope_log_log&) = delete;
 
 public:
-	~socpe_lock_log()
+	~scope_log_log()
 	{
 		std::cout << "unlock : " << log_ << std::endl;
 	}
-	socpe_lock_log(const std::string& log) : log_(log)
+	scope_log_log(const std::string& log) : log_(log)
 	{
 		std::cout << "lock   : " << log_ << std::endl;
 	}
@@ -34,22 +34,22 @@ void test_case_1()
 
 	ORDERED_LOCK_GUARDING(a)
 	{
-		socpe_lock_log scope_a("a");
+		scope_log_log scope_a("a");
 	}
 	std::cout << std::endl;
 	ORDERED_LOCK_GUARDING(b)
 	{
-		socpe_lock_log scope_b("b");
+		scope_log_log scope_b("b");
 	}
 	std::cout << std::endl;
 	ORDERED_LOCK_GUARDING(c)
 	{
-		socpe_lock_log scope_c("c");
+		scope_log_log scope_c("c");
 	}
 	std::cout << std::endl;
 	ORDERED_LOCK_GUARDING(d)
 	{
-		socpe_lock_log scope_d("d");
+		scope_log_log scope_d("d");
 	}
 }
 
@@ -61,11 +61,11 @@ void test_case_2()
 	// a -> b
 	ORDERED_LOCK_GUARDING(a)
 	{
-		socpe_lock_log scope_a("a");
+		scope_log_log scope_a("a");
 
 		ORDERED_LOCK_GUARDING(b)
 		{
-			socpe_lock_log scope_b("b");
+			scope_log_log scope_b("b");
 		}
 	}
 
@@ -73,11 +73,11 @@ void test_case_2()
 	// c -> d
 	ORDERED_LOCK_GUARDING(c)
 	{
-		socpe_lock_log scope_c("c");
+		scope_log_log scope_c("c");
 
 		ORDERED_LOCK_GUARDING(d)
 		{
-			socpe_lock_log scope_d("d");
+			scope_log_log scope_d("d");
 		}
 	}
 
@@ -85,11 +85,11 @@ void test_case_2()
 	// a -> d
 	ORDERED_LOCK_GUARDING(a)
 	{
-		socpe_lock_log scope_a("a");
+		scope_log_log scope_a("a");
 
 		ORDERED_LOCK_GUARDING(d)
 		{
-			socpe_lock_log scope_d("d");
+			scope_log_log scope_d("d");
 		}
 	}
 }
@@ -101,20 +101,20 @@ void test_case_3_error()
 	// a -> b -> d -> c(error)
 	ORDERED_LOCK_GUARDING(a)
 	{
-		socpe_lock_log scope_a("a");
+		scope_log_log scope_a("a");
 
 		ORDERED_LOCK_GUARDING(b)
 		{
-			socpe_lock_log scope_b("b");
+			scope_log_log scope_b("b");
 
 			ORDERED_LOCK_GUARDING(d)
 			{
-				socpe_lock_log scope_d("d");
+				scope_log_log scope_d("d");
 
 				// deadlock - circular wait error
 				ORDERED_LOCK_GUARDING(c)
 				{
-					socpe_lock_log scope_c("c");
+					scope_log_log scope_c("c");
 				}
 			}
 		}
@@ -123,12 +123,12 @@ void test_case_3_error()
 	// b -> a(error)
 	ORDERED_LOCK_GUARDING(b)
 	{
-		socpe_lock_log scope_b("b");
+		scope_log_log scope_b("b");
 
 		// deadlock - circular wait error
 		ORDERED_LOCK_GUARDING(a)
 		{
-			socpe_lock_log scope_a("a");
+			scope_log_log scope_a("a");
 		}
 	}
 
